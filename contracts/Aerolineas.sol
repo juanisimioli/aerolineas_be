@@ -37,8 +37,8 @@ contract Aerolineas is ERC721 {
     struct Flight {
         uint24 from;
         uint24 to;
-        uint256 departure;
-        uint256 arrival;
+        uint64 departure;
+        uint64 arrival;
         FlightStatus status;
         uint256 seatsLeft;
         uint256 totalSeats;
@@ -49,7 +49,7 @@ contract Aerolineas is ERC721 {
     struct Seat {
         SeatColumn column;
         uint256 price;
-        uint256 row;
+        uint8 row;
         SeatStatus status;
     }
 
@@ -57,7 +57,7 @@ contract Aerolineas is ERC721 {
         SeatColumn column;
         uint256 id;
         uint256 price;
-        uint256 row;
+        uint8 row;
         SeatStatus status;
     }
 
@@ -120,8 +120,8 @@ contract Aerolineas is ERC721 {
         uint256 indexed flightId,
         uint24 from,
         uint24 to,
-        uint256 departure,
-        uint256 arrival,
+        uint64 departure,
+        uint64 arrival,
         uint256 totalSeats
     );
     event FlightDisabled(uint256 indexed flightId);
@@ -157,8 +157,8 @@ contract Aerolineas is ERC721 {
     function createFlight(
         uint24 _from,
         uint24 _to,
-        uint256 _departure,
-        uint256 _arrival,
+        uint64 _departure,
+        uint64 _arrival,
         Seat[] memory _seats
     ) external onlyOwner {
         if (_seats.length == 0) revert InsufficientSeatsProvided();
@@ -409,13 +409,13 @@ contract Aerolineas is ERC721 {
             uint256 flight,
             uint24 from,
             uint24 to,
-            uint256 departure,
-            uint256 arrival,
+            uint64 departure,
+            uint64 arrival,
             FlightStatus flightStatus,
             SeatColumn column,
             uint256 seat,
             uint256 price,
-            uint256 row,
+            uint8 row,
             SeatStatus seatStatus
         )
     {
@@ -455,8 +455,8 @@ contract Aerolineas is ERC721 {
         returns (
             uint24 from,
             uint24 to,
-            uint256 departure,
-            uint256 arrival,
+            uint64 departure,
+            uint64 arrival,
             FlightStatus status,
             uint256 seatsLeft,
             uint256 totalSeats
