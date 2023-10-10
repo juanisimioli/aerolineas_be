@@ -1,10 +1,10 @@
-const { tokens } = require("./Aerolineas.utils");
+const { tokens, iataToUint24 } = require("./Aerolineas.utils");
 
 const { SeatColumn, SeatStatus } = require("./Aerolineas.contract.mocked");
 
 const FLIGHT_1 = {
-  from: "BRC",
-  to: "FTE",
+  from: iataToUint24("BRC"),
+  to: iataToUint24("FTE"),
   departure: Date.now(),
   arrival: Date.now(),
   seats: [
@@ -84,8 +84,8 @@ const FLIGHT_1 = {
 };
 
 const FLIGHT_2 = {
-  from: "EZE",
-  to: "MAD",
+  from: iataToUint24("EZE"),
+  to: iataToUint24("MAD"),
   departure: Date.now(),
   arrival: Date.now(),
   seats: [
@@ -165,8 +165,8 @@ const FLIGHT_2 = {
 };
 
 const FLIGHT_3 = {
-  from: "JFK",
-  to: "CDG",
+  from: iataToUint24("JFK"),
+  to: iataToUint24("CDG"),
   departure: Date.now(),
   arrival: Date.now(),
   seats: [

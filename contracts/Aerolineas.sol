@@ -35,8 +35,8 @@ contract Aerolineas is ERC721 {
     }
 
     struct Flight {
-        string from;
-        string to;
+        uint24 from;
+        uint24 to;
         uint256 departure;
         uint256 arrival;
         FlightStatus status;
@@ -121,8 +121,8 @@ contract Aerolineas is ERC721 {
     }
     event FlightCreated(
         uint256 indexed flightId,
-        string from,
-        string to,
+        uint24 from,
+        uint24 to,
         uint256 departure,
         uint256 arrival,
         uint256 totalSeats
@@ -158,8 +158,8 @@ contract Aerolineas is ERC721 {
     }
 
     function createFlight(
-        string memory _from,
-        string memory _to,
+        uint24 _from,
+        uint24 _to,
         uint256 _departure,
         uint256 _arrival,
         Seat[] memory _seats
@@ -410,8 +410,8 @@ contract Aerolineas is ERC721 {
         view
         returns (
             uint256 flight,
-            string memory from,
-            string memory to,
+            uint24 from,
+            uint24 to,
             uint256 departure,
             uint256 arrival,
             FlightStatus flightStatus,
@@ -456,8 +456,8 @@ contract Aerolineas is ERC721 {
         external
         view
         returns (
-            string memory from,
-            string memory to,
+            uint24 from,
+            uint24 to,
             uint256 departure,
             uint256 arrival,
             FlightStatus status,
