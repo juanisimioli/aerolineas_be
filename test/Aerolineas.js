@@ -69,68 +69,68 @@ describe("Aerolineas", () => {
     });
   });
 
-  // describe("Fees: cancellation and resale", async function () {
-  //   it("Should return fees", async function () {
-  //     const [feeCancellation, feeResale] = await aerolineas.getFees();
+  describe("Fees: cancellation and resale", async function () {
+    it("Should return fees", async function () {
+      const [feeCancellation, feeResale] = await aerolineas.getFees();
 
-  //     expect(Number(feeCancellation)).to.equal(FEE_CANCELLATION);
-  //     expect(Number(feeResale)).to.equal(FEE_RESALE);
-  //   });
+      expect(Number(feeCancellation)).to.equal(FEE_CANCELLATION);
+      expect(Number(feeResale)).to.equal(FEE_RESALE);
+    });
 
-  //   it("Should update fees", async function () {
-  //     const newFeeCancellation = 10;
-  //     const newFeeResale = 50;
+    it("Should update fees", async function () {
+      const newFeeCancellation = 10;
+      const newFeeResale = 50;
 
-  //     await aerolineas
-  //       .connect(deployer)
-  //       .updateFeeCancellation(newFeeCancellation);
-  //     await aerolineas.connect(deployer).updateFeeResale(newFeeResale);
+      await aerolineas
+        .connect(deployer)
+        .updateFeeCancellation(newFeeCancellation);
+      await aerolineas.connect(deployer).updateFeeResale(newFeeResale);
 
-  //     const [feeCancellation, feeResale] = await aerolineas
-  //       .connect(deployer)
-  //       .getFees();
+      const [feeCancellation, feeResale] = await aerolineas
+        .connect(deployer)
+        .getFees();
 
-  //     expect(Number(feeCancellation)).to.equal(newFeeCancellation);
-  //     expect(Number(feeResale)).to.equal(newFeeResale);
-  //   });
+      expect(Number(feeCancellation)).to.equal(newFeeCancellation);
+      expect(Number(feeResale)).to.equal(newFeeResale);
+    });
 
-  //   it("Should validate onlyOwner for get and update", async function () {
-  //     const updateCancellation = aerolineas
-  //       .connect(buyer1)
-  //       .updateFeeCancellation(5);
-  //     const updateResale = aerolineas.connect(buyer1).updateFeeResale(5);
-  //     const getFees = aerolineas.connect(buyer1).getFees();
+    it("Should validate onlyOwner for get and update", async function () {
+      const updateCancellation = aerolineas
+        .connect(buyer1)
+        .updateFeeCancellation(5);
+      const updateResale = aerolineas.connect(buyer1).updateFeeResale(5);
+      const getFees = aerolineas.connect(buyer1).getFees();
 
-  //     await expect(updateCancellation).to.be.revertedWithCustomError(
-  //       aerolineas,
-  //       "NotOwner"
-  //     );
-  //     await expect(updateResale).to.be.revertedWithCustomError(
-  //       aerolineas,
-  //       "NotOwner"
-  //     );
-  //     await expect(getFees).to.be.revertedWithCustomError(
-  //       aerolineas,
-  //       "NotOwner"
-  //     );
-  //   });
+      await expect(updateCancellation).to.be.revertedWithCustomError(
+        aerolineas,
+        "NotOwner"
+      );
+      await expect(updateResale).to.be.revertedWithCustomError(
+        aerolineas,
+        "NotOwner"
+      );
+      await expect(getFees).to.be.revertedWithCustomError(
+        aerolineas,
+        "NotOwner"
+      );
+    });
 
-  //   it("Should validate percentage numbers from 0 to 100", async function () {
-  //     const updateCancellation = aerolineas
-  //       .connect(deployer)
-  //       .updateFeeCancellation(101);
-  //     const updateResale = aerolineas.connect(deployer).updateFeeResale(101);
+    it("Should validate percentage numbers from 0 to 100", async function () {
+      const updateCancellation = aerolineas
+        .connect(deployer)
+        .updateFeeCancellation(101);
+      const updateResale = aerolineas.connect(deployer).updateFeeResale(101);
 
-  //     await expect(updateCancellation).to.be.revertedWithCustomError(
-  //       aerolineas,
-  //       "InvalidPercentageNumber"
-  //     );
-  //     await expect(updateResale).to.be.revertedWithCustomError(
-  //       aerolineas,
-  //       "InvalidPercentageNumber"
-  //     );
-  //   });
-  // });
+      await expect(updateCancellation).to.be.revertedWithCustomError(
+        aerolineas,
+        "InvalidPercentageNumber"
+      );
+      await expect(updateResale).to.be.revertedWithCustomError(
+        aerolineas,
+        "InvalidPercentageNumber"
+      );
+    });
+  });
 
   describe("Flights", async function () {
     it("Should get available flights", async function () {
@@ -162,31 +162,31 @@ describe("Aerolineas", () => {
       expect(flight2.totalSeats).to.be.equal(FLIGHT_2.seats.length);
     });
 
-    // it("Should disable and enable Flight", async function () {
-    //   await aerolineas.connect(deployer).disableFlight(1);
-    //   const flightsAvailable1 = await aerolineas.getAvailableFlights();
-    //   expect(flightsAvailable1.length).to.be.equal(1);
-    //   expect(flightsAvailable1).to.deep.equal([2]);
+    it("Should disable and enable Flight", async function () {
+      await aerolineas.connect(deployer).disableFlight(1);
+      const flightsAvailable1 = await aerolineas.getAvailableFlights();
+      expect(flightsAvailable1.length).to.be.equal(1);
+      expect(flightsAvailable1).to.deep.equal([2]);
 
-    //   await aerolineas.connect(deployer).enableFlight(1);
-    //   const flightsAvailable2 = await aerolineas.getAvailableFlights();
-    //   expect(flightsAvailable2.length).to.be.equal(2);
-    //   expect(flightsAvailable2).to.deep.equal([2, 1]);
-    // });
+      await aerolineas.connect(deployer).enableFlight(1);
+      const flightsAvailable2 = await aerolineas.getAvailableFlights();
+      expect(flightsAvailable2.length).to.be.equal(2);
+      expect(flightsAvailable2).to.deep.equal([2, 1]);
+    });
 
-    // it("Should validate onlyOwner for disable and enable flights", async function () {
-    //   const disableFlight = aerolineas.connect(buyer1).disableFlight(1);
-    //   const enableFlight = aerolineas.connect(buyer1).disableFlight(1);
+    it("Should validate onlyOwner for disable and enable flights", async function () {
+      const disableFlight = aerolineas.connect(buyer1).disableFlight(1);
+      const enableFlight = aerolineas.connect(buyer1).disableFlight(1);
 
-    //   await expect(disableFlight).to.be.revertedWithCustomError(
-    //     aerolineas,
-    //     "NotOwner"
-    //   );
-    //   await expect(enableFlight).to.be.revertedWithCustomError(
-    //     aerolineas,
-    //     "NotOwner"
-    //   );
-    // });
+      await expect(disableFlight).to.be.revertedWithCustomError(
+        aerolineas,
+        "NotOwner"
+      );
+      await expect(enableFlight).to.be.revertedWithCustomError(
+        aerolineas,
+        "NotOwner"
+      );
+    });
   });
 
   describe("Seats", async function () {

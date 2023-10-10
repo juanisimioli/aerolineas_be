@@ -507,39 +507,39 @@ contract Aerolineas is ERC721 {
         return seatsFromFlight;
     }
 
-    // function updateFeeCancellation(uint8 _feeCancellation) external onlyOwner {
-    //     if (_feeCancellation > 100) revert InvalidPercentageNumber();
-    //     feeCancellation = _feeCancellation;
-    // }
+    function updateFeeCancellation(uint8 _feeCancellation) external onlyOwner {
+        if (_feeCancellation > 100) revert InvalidPercentageNumber();
+        feeCancellation = _feeCancellation;
+    }
 
-    // function updateFeeResale(uint8 _feeResale) external onlyOwner {
-    //     if (_feeResale > 100) revert InvalidPercentageNumber();
-    //     feeResale = _feeResale;
-    // }
+    function updateFeeResale(uint8 _feeResale) external onlyOwner {
+        if (_feeResale > 100) revert InvalidPercentageNumber();
+        feeResale = _feeResale;
+    }
 
-    // function getFees() external view onlyOwner returns (uint8, uint8) {
-    //     return (feeCancellation, feeResale);
-    // }
+    function getFees() external view onlyOwner returns (uint8, uint8) {
+        return (feeCancellation, feeResale);
+    }
 
-    // function disableFlight(uint256 _flightId) external onlyOwner {
-    //     if (flights[_flightId].status == FlightStatus.Disabled)
-    //         revert FlightAlreadyDisabled();
+    function disableFlight(uint256 _flightId) external onlyOwner {
+        if (flights[_flightId].status == FlightStatus.Disabled)
+            revert FlightAlreadyDisabled();
 
-    //     flights[_flightId].status = FlightStatus.Disabled;
-    //     AerolineasUtils.removeElement(availableFlights, _flightId);
+        flights[_flightId].status = FlightStatus.Disabled;
+        AerolineasUtils.removeElement(availableFlights, _flightId);
 
-    //     emit FlightDisabled(_flightId);
-    // }
+        emit FlightDisabled(_flightId);
+    }
 
-    // function enableFlight(uint256 _flightId) external onlyOwner {
-    //     if (flights[_flightId].status == FlightStatus.Enabled)
-    //         revert FlightAlreadyEnabled();
+    function enableFlight(uint256 _flightId) external onlyOwner {
+        if (flights[_flightId].status == FlightStatus.Enabled)
+            revert FlightAlreadyEnabled();
 
-    //     flights[_flightId].status = FlightStatus.Enabled;
-    //     availableFlights.push(_flightId);
+        flights[_flightId].status = FlightStatus.Enabled;
+        availableFlights.push(_flightId);
 
-    //     emit FlightEnabled(_flightId);
-    // }
+        emit FlightEnabled(_flightId);
+    }
 
     function withdraw() public onlyOwner {
         (bool s, ) = owner.call{value: address(this).balance}("");
