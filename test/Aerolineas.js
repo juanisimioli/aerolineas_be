@@ -234,6 +234,21 @@ describe("Aerolineas", () => {
       // TODO;
     });
 
+    it("Should not allow to buy disabled flight", async function () {
+      await aerolineas.connect(deployer).disableFlight(flightId1);
+
+      const reservation = aerolineas
+        .connect(buyer1)
+        .reserveFlight(flightId1, flightSeat1, {
+          value: priceSeat1,
+        });
+
+      await expect(reservation).to.be.revertedWithCustomError(
+        aerolineas,
+        "FlightNotAvailable"
+      );
+    });
+
     it("Should not allow to buy same seat on same flight", async function () {
       await aerolineas.connect(buyer1).reserveFlight(flightId1, flightSeat1, {
         value: priceSeat1,
@@ -274,6 +289,42 @@ describe("Aerolineas", () => {
       await expect(reservation3)
         .to.emit(aerolineas, "ReservationMade")
         .withArgs(2, flightId2, flightSeat2, buyer1.address);
+    });
+    it("Should not allow to buy more than available seats", async function () {
+      const flight_3 = await aerolineas.createFlight(
+        FLIGHT_3.from,
+        FLIGHT_3.to,
+        FLIGHT_3.departure,
+        FLIGHT_3.arrival,
+        FLIGHT_3.seats
+      );
+
+      flight_3.wait();
+
+      const flightId3 = 3;
+      const flightSeat3A = 25;
+      const flightSeat3B = 26;
+      const flightSeat3C = 27;
+      const priceSeat3 = FLIGHT_3.seats[0].price;
+
+      await aerolineas.connect(buyer1).reserveFlight(flightId3, flightSeat3A, {
+        value: priceSeat3,
+      });
+
+      await aerolineas.connect(buyer2).reserveFlight(flightId3, flightSeat3B, {
+        value: priceSeat3,
+      });
+
+      const reservationWithNoSeats = aerolineas
+        .connect(buyer3)
+        .reserveFlight(flightId3, flightSeat3C, {
+          value: priceSeat3,
+        });
+
+      await expect(reservationWithNoSeats).to.be.revertedWithCustomError(
+        aerolineas,
+        "NoSeatLeft"
+      );
     });
     it("Should update seat status", async function () {
       const seatBeforeReservation = await aerolineas.getSeatsFromFlight(1);
@@ -334,6 +385,7 @@ describe("Aerolineas", () => {
       expect(reservationInfoBuyer2.flight).to.be.equal(flightId1);
       expect(reservationInfoBuyer2.seat).to.be.equal(flightSeat1);
     });
+    it("Should provide a valid address when transfer a reservation for free", async function () {});
   });
 
   describe("Cancel Reservations", async function () {

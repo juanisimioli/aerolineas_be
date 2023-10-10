@@ -111,14 +111,11 @@ contract Aerolineas is ERC721 {
     error SeatAlreadyAvailable();
     error SeatOnResaleOrResold();
 
-    function _onlyOwner() private view {
-        if (msg.sender != owner) revert NotOwner();
-    }
-
     modifier onlyOwner() {
-        _onlyOwner();
+        if (msg.sender != owner) revert NotOwner();
         _;
     }
+
     event FlightCreated(
         uint256 indexed flightId,
         uint24 from,

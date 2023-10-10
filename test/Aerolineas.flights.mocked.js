@@ -182,18 +182,6 @@ const FLIGHT_3 = {
       row: 1,
       status: SeatStatus.Available,
     },
-    {
-      price: tokens(10),
-      column: SeatColumn.A,
-      row: 2,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(10),
-      column: SeatColumn.B,
-      row: 2,
-      status: SeatStatus.Available,
-    },
   ],
 };
 
