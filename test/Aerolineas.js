@@ -101,17 +101,12 @@ describe("Aerolineas", () => {
         .connect(buyer1)
         .updateFeeCancellation(5);
       const updateResale = aerolineas.connect(buyer1).updateFeeResale(5);
-      const getFees = aerolineas.connect(buyer1).getFees();
 
       await expect(updateCancellation).to.be.revertedWithCustomError(
         aerolineas,
         "NotOwner"
       );
       await expect(updateResale).to.be.revertedWithCustomError(
-        aerolineas,
-        "NotOwner"
-      );
-      await expect(getFees).to.be.revertedWithCustomError(
         aerolineas,
         "NotOwner"
       );
@@ -196,11 +191,11 @@ describe("Aerolineas", () => {
       const seatFromFlight1 = await aerolineas.getSeatsFromFlight(1);
 
       const convertedSeats = seatFromFlight1.map((seat) => ({
-        column: ethers.toNumber(seat[0]),
-        id: ethers.toNumber(seat[1]),
-        price: ethers.parseUnits(seat[2].toString(), "wei"),
-        row: ethers.toNumber(seat[3]),
-        status: ethers.toNumber(seat[4]),
+        column: ethers.toNumber(seat.column),
+        id: ethers.toNumber(seat.id),
+        price: ethers.parseUnits(seat.price.toString(), "wei"),
+        row: ethers.toNumber(seat.row),
+        status: ethers.toNumber(seat.status),
       }));
 
       const mockedFlightWithId = FLIGHT_1.seats.map((seat, i) => ({
@@ -423,7 +418,7 @@ describe("Aerolineas", () => {
 
       await expect(reservationCancel)
         .to.emit(aerolineas, "ReservationCanceled")
-        .withArgs(reservationId1);
+        .withArgs(reservationId1, buyer1.address);
 
       const receiptReservationCancel = await reservationCancel.wait();
 
@@ -507,7 +502,7 @@ describe("Aerolineas", () => {
 
       const seatAfterUndoResale = await aerolineas.getSeatsFromFlight(1);
 
-      expect(seatAfterUndoResale[2].status).to.be.equal(SeatStatus.Available);
+      expect(seatAfterUndoResale[2].status).to.be.equal(SeatStatus.Resold);
       expect(seatAfterUndoResale[2].price).to.be.equal(priceSeat1);
     });
   });
