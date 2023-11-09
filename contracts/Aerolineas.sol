@@ -4,55 +4,16 @@ import "hardhat/console.sol";
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "./AerolineasFlights.sol";
 import "./AerolineasUtils.sol";
 
-contract Aerolineas is ERC721 {
+contract Aerolineas is ERC721, AerolineasFlights {
     using AerolineasUtils for *;
     using Counters for Counters.Counter;
-
-    enum FlightStatus {
-        Disabled,
-        Enabled
-    }
-
-    enum SeatStatus {
-        Available,
-        OnResale,
-        Sold,
-        Resold
-    }
 
     enum AddressOnFlight {
         NotTaken,
         Taken
-    }
-
-    struct Flight {
-        uint24 from;
-        uint24 to;
-        uint64 departure;
-        uint64 arrival;
-        uint24 flightNumber;
-        FlightStatus status;
-        uint256 seatsLeft;
-        uint256 totalSeats;
-        uint256[] seatIds;
-        mapping(uint256 => Seat) seats;
-    }
-
-    struct Seat {
-        uint8 column;
-        uint8 row;
-        uint256 price;
-        SeatStatus status;
-    }
-
-    struct SeatWithId {
-        uint256 id;
-        uint8 column;
-        uint8 row;
-        uint256 price;
-        SeatStatus status;
     }
 
     struct Reservation {
