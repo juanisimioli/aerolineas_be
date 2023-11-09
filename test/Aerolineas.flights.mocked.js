@@ -1,188 +1,79 @@
-const { tokens, iataToUint24 } = require("./Aerolineas.utils");
+const {
+  tokens,
+  iataToUint24,
+  generateSeatsFromConfig,
+} = require("./Aerolineas.utils");
 
-const { SeatColumn, SeatStatus } = require("./Aerolineas.contract.mocked");
+const { SeatColumn } = require("../scripts/Aerolineas.contract.mocked");
+
+const seatsConfigFlight1 = [
+  { price: tokens(1), rows: 3, columns: SeatColumn.D },
+];
 
 const FLIGHT_1 = {
+  flightNumber: 111,
   from: iataToUint24("BRC"),
   to: iataToUint24("FTE"),
-  departure: Date.now(),
-  arrival: Date.now(),
-  seats: [
-    {
-      price: tokens(1),
-      column: SeatColumn.A,
-      row: 1,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(1),
-      column: SeatColumn.B,
-      row: 1,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(1),
-      column: SeatColumn.C,
-      row: 1,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(1),
-      column: SeatColumn.D,
-      row: 1,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(1),
-      column: SeatColumn.A,
-      row: 2,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(1),
-      column: SeatColumn.B,
-      row: 2,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(1),
-      column: SeatColumn.C,
-      row: 2,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(1),
-      column: SeatColumn.D,
-      row: 2,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(1),
-      column: SeatColumn.A,
-      row: 3,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(1),
-      column: SeatColumn.B,
-      row: 3,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(1),
-      column: SeatColumn.C,
-      row: 3,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(1),
-      column: SeatColumn.D,
-      row: 3,
-      status: SeatStatus.Available,
-    },
-  ],
+  departure: Date.parse("2023/12/28 23:21"),
+  arrival: Date.parse("2023/12/29 00:57"),
+  seats: generateSeatsFromConfig(seatsConfigFlight1),
 };
+
+const seatsConfigFlight2 = [
+  { price: tokens(4), rows: 2, columns: SeatColumn.F },
+];
 
 const FLIGHT_2 = {
+  flightNumber: 222,
   from: iataToUint24("EZE"),
   to: iataToUint24("MAD"),
-  departure: Date.now(),
-  arrival: Date.now(),
-  seats: [
-    {
-      price: tokens(4),
-      column: SeatColumn.A,
-      row: 1,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(4),
-      column: SeatColumn.B,
-      row: 1,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(4),
-      column: SeatColumn.C,
-      row: 1,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(4),
-      column: SeatColumn.D,
-      row: 1,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(4),
-      column: SeatColumn.E,
-      row: 1,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(4),
-      column: SeatColumn.F,
-      row: 1,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(4),
-      column: SeatColumn.A,
-      row: 2,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(4),
-      column: SeatColumn.B,
-      row: 2,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(4),
-      column: SeatColumn.C,
-      row: 2,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(4),
-      column: SeatColumn.D,
-      row: 2,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(4),
-      column: SeatColumn.E,
-      row: 2,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(4),
-      column: SeatColumn.F,
-      row: 2,
-      status: SeatStatus.Available,
-    },
-  ],
+  departure: Date.parse("2023/11/01 03:11"),
+  arrival: Date.parse("2023/11/01 21:01"),
+  seats: generateSeatsFromConfig(seatsConfigFlight2),
 };
+
+const seatsConfigFlight3 = [
+  { price: tokens(10), rows: 1, columns: SeatColumn.B },
+];
 
 const FLIGHT_3 = {
+  flightNumber: 333,
   from: iataToUint24("JFK"),
   to: iataToUint24("CDG"),
-  departure: Date.now(),
-  arrival: Date.now(),
-  seats: [
-    {
-      price: tokens(10),
-      column: SeatColumn.A,
-      row: 1,
-      status: SeatStatus.Available,
-    },
-    {
-      price: tokens(10),
-      column: SeatColumn.B,
-      row: 1,
-      status: SeatStatus.Available,
-    },
-  ],
+  departure: Date.parse("2023/11/28 11:11"),
+  arrival: Date.parse("2023/11/28 22:22"),
+  seats: generateSeatsFromConfig(seatsConfigFlight3),
 };
 
-module.exports = { FLIGHT_1, FLIGHT_2, FLIGHT_3 };
+const seatsConfigFlight4 = [
+  { price: tokens(10), rows: 1, columns: SeatColumn.B },
+];
+
+const FLIGHT_4 = {
+  flightNumber: 444,
+  from: iataToUint24("JFK"),
+  to: iataToUint24("CDG"),
+  departure: Date.parse("2023/10/28 15:59"),
+  arrival: Date.parse("2023/10/28 21:33"),
+  seats: generateSeatsFromConfig(seatsConfigFlight4),
+};
+
+const seatsConfigFlight5 = [
+  { price: tokens(10), rows: 2, columns: SeatColumn.B },
+  { price: tokens(8), rows: 2, columns: SeatColumn.D },
+  { price: tokens(5), rows: 2, columns: SeatColumn.F },
+  { price: tokens(5), rows: 3, columns: SeatColumn.F },
+  { price: tokens(5), rows: 3, columns: SeatColumn.F },
+  { price: tokens(5), rows: 3, columns: SeatColumn.F },
+];
+
+const FLIGHT_5 = {
+  flightNumber: 555,
+  from: iataToUint24("JFK"),
+  to: iataToUint24("CDG"),
+  departure: Date.parse("2023/11/28 10:05"),
+  arrival: Date.parse("2023/11/28 17:21"),
+  seats: generateSeatsFromConfig(seatsConfigFlight5),
+};
+
+module.exports = { FLIGHT_1, FLIGHT_2, FLIGHT_3, FLIGHT_4, FLIGHT_5 };

@@ -1,3 +1,5 @@
+const { SeatStatus } = require("../scripts/Aerolineas.contract.mocked");
+
 const getKeyByValue = (object, value) => {
   return Object.keys(object).find((key) => object[key] === value);
 };
@@ -37,4 +39,33 @@ function uint24ToIata(uintValue) {
   return iataCode;
 }
 
-module.exports = { getKeyByValue, tokens, iataToUint24, uint24ToIata };
+const generateSeatsFromConfig = (seatsConfig) => {
+  const seatsForFlight = seatsConfig.reduce(
+    ({ acc, lastRow }, { price, rows, columns }) => {
+      let currentGroup = [];
+
+      for (let row = 1; row <= rows; row++) {
+        for (let column = 0; column <= columns; column++) {
+          currentGroup.push({
+            price,
+            status: SeatStatus.Available,
+            row: row + lastRow,
+            column,
+          });
+        }
+      }
+
+      return { acc: [...acc, ...currentGroup], lastRow: lastRow + rows };
+    },
+    { acc: [], lastRow: 0 }
+  );
+  return seatsForFlight.acc;
+};
+
+module.exports = {
+  getKeyByValue,
+  tokens,
+  iataToUint24,
+  uint24ToIata,
+  generateSeatsFromConfig,
+};

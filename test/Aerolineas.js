@@ -7,7 +7,7 @@ const {
   FEE_RESALE,
   FlightStatus,
   SeatStatus,
-} = require("./Aerolineas.contract.mocked");
+} = require("../scripts/Aerolineas.contract.mocked");
 
 const { FLIGHT_1, FLIGHT_2, FLIGHT_3 } = require("./Aerolineas.flights.mocked");
 
@@ -32,6 +32,7 @@ describe("Aerolineas", () => {
     aerolineasAddress = await aerolineas.getAddress();
 
     const flight_1 = await aerolineas.createFlight(
+      FLIGHT_1.flightNumber,
       FLIGHT_1.from,
       FLIGHT_1.to,
       FLIGHT_1.departure,
@@ -42,6 +43,7 @@ describe("Aerolineas", () => {
     flight_1.wait();
 
     const flight_2 = await aerolineas.createFlight(
+      FLIGHT_1.flightNumber,
       FLIGHT_2.from,
       FLIGHT_2.to,
       FLIGHT_2.departure,
@@ -292,6 +294,7 @@ describe("Aerolineas", () => {
     });
     it("Should not allow to buy more than available seats", async function () {
       const flight_3 = await aerolineas.createFlight(
+        FLIGHT_1.flightNumber,
         FLIGHT_3.from,
         FLIGHT_3.to,
         FLIGHT_3.departure,
@@ -393,10 +396,6 @@ describe("Aerolineas", () => {
     const flightSeat1 = 3;
     const priceSeat1 = FLIGHT_1.seats[2].price;
     const reservationId1 = 1;
-
-    const flightId2 = 2;
-    const flightSeat2 = 15;
-    const priceSeat2 = FLIGHT_2.seats[2].price;
 
     it("Should cancel a reservation, emit an event a refund money to owner with fee cancellation applied", async function () {
       const initialBalanceAerolineas = await ethers.provider.getBalance(

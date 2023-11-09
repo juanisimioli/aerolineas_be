@@ -3,10 +3,12 @@ pragma solidity ^0.8.18;
 import "hardhat/console.sol";
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 import "./AerolineasUtils.sol";
 
 contract Aerolineas is ERC721 {
     using AerolineasUtils for *;
+    using Counters for Counters.Counter;
 
     enum FlightStatus {
         Disabled,
@@ -25,20 +27,12 @@ contract Aerolineas is ERC721 {
         Taken
     }
 
-    enum SeatColumn {
-        A,
-        B,
-        C,
-        D,
-        E,
-        F
-    }
-
     struct Flight {
         uint24 from;
         uint24 to;
         uint64 departure;
         uint64 arrival;
+        uint24 flightNumber;
         FlightStatus status;
         uint256 seatsLeft;
         uint256 totalSeats;
@@ -47,17 +41,17 @@ contract Aerolineas is ERC721 {
     }
 
     struct Seat {
-        SeatColumn column;
-        uint256 price;
+        uint8 column;
         uint8 row;
+        uint256 price;
         SeatStatus status;
     }
 
     struct SeatWithId {
-        SeatColumn column;
         uint256 id;
-        uint256 price;
+        uint8 column;
         uint8 row;
+        uint256 price;
         SeatStatus status;
     }
 
@@ -65,6 +59,7 @@ contract Aerolineas is ERC721 {
         uint256 flightId;
         uint256 seatId;
         address passenger;
+        uint256 timestamp;
     }
 
     struct Resale {
@@ -79,7 +74,7 @@ contract Aerolineas is ERC721 {
 
     uint256 private flightId;
     uint256 private seatId;
-    uint256 private reservationId;
+    Counters.Counter private reservationId;
     uint256[] public availableFlights;
 
     mapping(uint256 => Flight) flights;
@@ -118,25 +113,36 @@ contract Aerolineas is ERC721 {
 
     event FlightCreated(
         uint256 indexed flightId,
+        uint24 flightNumber,
         uint24 from,
         uint24 to,
         uint64 departure,
         uint64 arrival,
         uint256 totalSeats
     );
-    event FlightDisabled(uint256 indexed flightId);
-    event FlightEnabled(uint256 indexed flightId);
     event ReservationMade(
         uint256 indexed reservationId,
         uint256 indexed flightId,
         uint256 seatId,
         address passenger
     );
-    event ReservationCanceled(uint256 indexed reservationId);
+    event ReservationCanceled(
+        uint256 indexed reservationId,
+        address passengers
+    );
     event ReservationTransferred(
         uint256 indexed reservationId,
         address indexed previousOwner,
         address indexed newOwner
+    );
+    event ReservationOnResale(
+        uint256 indexed reservationId,
+        uint256 _resalePrice,
+        address passenger
+    );
+    event UndoReservationOnResale(
+        uint256 indexed reservationId,
+        address passenger
     );
 
     constructor(
@@ -155,16 +161,18 @@ contract Aerolineas is ERC721 {
     }
 
     function createFlight(
+        uint24 _flightNumber,
         uint24 _from,
         uint24 _to,
         uint64 _departure,
         uint64 _arrival,
-        Seat[] memory _seats
+        Seat[] calldata _seats
     ) external onlyOwner {
         if (_seats.length == 0) revert InsufficientSeatsProvided();
 
         flightId++;
         Flight storage flight = flights[flightId];
+        flight.flightNumber = _flightNumber;
         flight.from = _from;
         flight.to = _to;
         flight.departure = _departure;
@@ -192,6 +200,7 @@ contract Aerolineas is ERC721 {
 
         emit FlightCreated(
             flightId,
+            _flightNumber,
             _from,
             _to,
             _departure,
@@ -221,21 +230,28 @@ contract Aerolineas is ERC721 {
             if (msg.value != flight.seats[_seatId].price)
                 revert IncorrectPaymentAmount();
 
-            reservationId++;
+            reservationId.increment();
+            uint256 newReservatioId = reservationId.current();
 
-            Reservation storage reservation = reservations[reservationId];
+            Reservation storage reservation = reservations[newReservatioId];
             reservation.flightId = _flightId;
             reservation.seatId = _seatId;
             reservation.passenger = msg.sender;
+            reservation.timestamp = block.timestamp;
 
             flight.seats[_seatId].status = SeatStatus.Sold;
 
             addressOnFlight[_flightId][msg.sender] = AddressOnFlight.Taken;
 
-            reservationsByAddress[msg.sender].push(reservationId);
+            reservationsByAddress[msg.sender].push(newReservatioId);
 
-            _safeMint(msg.sender, reservationId);
-            emit ReservationMade(reservationId, _flightId, _seatId, msg.sender);
+            _safeMint(msg.sender, newReservatioId);
+            emit ReservationMade(
+                newReservatioId,
+                _flightId,
+                _seatId,
+                msg.sender
+            );
         } else if (flight.seats[_seatId].status == SeatStatus.OnResale) {
             Resale storage resaleInfo = resaleData[_seatId];
 
@@ -251,9 +267,9 @@ contract Aerolineas is ERC721 {
 
             AerolineasUtils.removeElement(
                 reservationsByAddress[oldOwner],
-                reservationId
+                resaleInfo.reservationId
             );
-            reservationsByAddress[msg.sender].push(reservationId);
+            reservationsByAddress[msg.sender].push(resaleInfo.reservationId);
 
             // Refund money to owner who is selling the seat (fee on resale is applied)
             (bool s, ) = oldOwner.call{
@@ -265,7 +281,12 @@ contract Aerolineas is ERC721 {
 
             if (!s) revert RefundFailed();
 
-            emit ReservationMade(reservationId, _flightId, _seatId, msg.sender);
+            emit ReservationMade(
+                resaleInfo.reservationId,
+                _flightId,
+                _seatId,
+                msg.sender
+            );
         }
     }
 
@@ -299,7 +320,7 @@ contract Aerolineas is ERC721 {
 
         AerolineasUtils.removeElement(
             reservationsByAddress[msg.sender],
-            reservationId
+            _reservationId
         );
 
         delete reservations[_reservationId];
@@ -311,7 +332,7 @@ contract Aerolineas is ERC721 {
         }("");
         if (!s) revert RefundFailed();
 
-        emit ReservationCanceled(_reservationId);
+        emit ReservationCanceled(_reservationId, msg.sender);
     }
 
     function resaleReservation(
@@ -333,6 +354,8 @@ contract Aerolineas is ERC721 {
         flights[reservation.flightId]
             .seats[reservation.seatId]
             .status = SeatStatus.OnResale;
+
+        emit ReservationOnResale(_reservationId, _resalePrice, msg.sender);
     }
 
     function undoResaleReservation(uint256 _reservationId) external {
@@ -344,22 +367,25 @@ contract Aerolineas is ERC721 {
         flight.seatsLeft--;
         flights[reservations[_reservationId].flightId]
             .seats[reservations[_reservationId].seatId]
-            .status = SeatStatus.Available;
+            .status = SeatStatus.Resold;
 
         resaleData[reservations[_reservationId].seatId].resalePrice = 0;
+
+        emit UndoReservationOnResale(_reservationId, msg.sender);
     }
 
     function transferReservation(
         uint256 _reservationId,
         address _oldOwner,
         address _newOwner
-    ) internal {
+    ) private {
         if (ownerOf(_reservationId) != _oldOwner) revert NotOwnReservation();
         if (_newOwner == address(0)) revert InvalidAddressProvided();
 
         Reservation storage reservation = reservations[_reservationId];
 
         reservation.passenger = _newOwner;
+        reservation.timestamp = block.timestamp;
 
         addressOnFlight[reservation.flightId][_oldOwner] = AddressOnFlight
             .NotTaken;
@@ -383,7 +409,7 @@ contract Aerolineas is ERC721 {
             reservationsByAddress[msg.sender],
             _reservationId
         );
-        reservationsByAddress[_newOwner].push(reservationId);
+        reservationsByAddress[_newOwner].push(_reservationId);
 
         transferReservation(_reservationId, msg.sender, _newOwner);
     }
@@ -406,44 +432,42 @@ contract Aerolineas is ERC721 {
         external
         view
         returns (
+            uint256 reservation,
             uint256 flight,
-            uint24 from,
-            uint24 to,
-            uint64 departure,
-            uint64 arrival,
-            FlightStatus flightStatus,
-            SeatColumn column,
+            uint8 column,
             uint256 seat,
             uint256 price,
             uint8 row,
-            SeatStatus seatStatus
+            SeatStatus seatStatus,
+            uint256 timestamp
         )
     {
-        Reservation storage reservation = reservations[_reservationId];
+        Reservation storage currentReservation = reservations[_reservationId];
 
-        if (msg.sender != reservation.passenger) revert NotReservationOwner();
+        if (msg.sender != currentReservation.passenger)
+            revert NotReservationOwner();
 
-        Flight storage currentFlight = flights[reservation.flightId];
-        Seat storage currentSeat = currentFlight.seats[reservation.seatId];
+        Flight storage currentFlight = flights[currentReservation.flightId];
+        Seat storage currentSeat = currentFlight.seats[
+            currentReservation.seatId
+        ];
 
         uint256 currentSeatPrice = currentSeat.price;
 
-        if (resaleData[reservation.seatId].resalePrice > 0) {
-            currentSeatPrice = resaleData[reservation.seatId].resalePrice;
+        if (resaleData[currentReservation.seatId].resalePrice > 0) {
+            currentSeatPrice = resaleData[currentReservation.seatId]
+                .resalePrice;
         }
 
         return (
-            reservation.flightId,
-            currentFlight.from,
-            currentFlight.to,
-            currentFlight.departure,
-            currentFlight.arrival,
-            currentFlight.status,
+            _reservationId,
+            currentReservation.flightId,
             currentSeat.column,
-            reservation.seatId,
+            currentReservation.seatId,
             currentSeatPrice,
             currentSeat.row,
-            currentSeat.status
+            currentSeat.status,
+            currentReservation.timestamp
         );
     }
 
@@ -453,6 +477,8 @@ contract Aerolineas is ERC721 {
         external
         view
         returns (
+            uint256 id,
+            uint24 flightNumber,
             uint24 from,
             uint24 to,
             uint64 departure,
@@ -465,6 +491,8 @@ contract Aerolineas is ERC721 {
         Flight storage flight = flights[_flightId];
 
         return (
+            _flightId,
+            flight.flightNumber,
             flight.from,
             flight.to,
             flight.departure,
@@ -504,47 +532,47 @@ contract Aerolineas is ERC721 {
         return seatsFromFlight;
     }
 
-    function updateFeeCancellation(uint8 _feeCancellation) external onlyOwner {
-        if (_feeCancellation > 100) revert InvalidPercentageNumber();
-        feeCancellation = _feeCancellation;
-    }
+    // function updateFeeCancellation(uint8 _feeCancellation) external onlyOwner {
+    //     if (_feeCancellation > 100) revert InvalidPercentageNumber();
+    //     feeCancellation = _feeCancellation;
+    // }
 
-    function updateFeeResale(uint8 _feeResale) external onlyOwner {
-        if (_feeResale > 100) revert InvalidPercentageNumber();
-        feeResale = _feeResale;
-    }
+    // function updateFeeResale(uint8 _feeResale) external onlyOwner {
+    //     if (_feeResale > 100) revert InvalidPercentageNumber();
+    //     feeResale = _feeResale;
+    // }
 
-    function getFees() external view onlyOwner returns (uint8, uint8) {
+    function getFees() external view returns (uint8, uint8) {
         return (feeCancellation, feeResale);
     }
 
-    function disableFlight(uint256 _flightId) external onlyOwner {
-        if (flights[_flightId].status == FlightStatus.Disabled)
-            revert FlightAlreadyDisabled();
+    // function disableFlight(uint256 _flightId) external onlyOwner {
+    //     if (flights[_flightId].status == FlightStatus.Disabled)
+    //         revert FlightAlreadyDisabled();
 
-        flights[_flightId].status = FlightStatus.Disabled;
-        AerolineasUtils.removeElement(availableFlights, _flightId);
+    //     flights[_flightId].status = FlightStatus.Disabled;
+    //     AerolineasUtils.removeElement(availableFlights, _flightId);
 
-        emit FlightDisabled(_flightId);
-    }
+    //     emit FlightDisabled(_flightId);
+    // }
 
-    function enableFlight(uint256 _flightId) external onlyOwner {
-        if (flights[_flightId].status == FlightStatus.Enabled)
-            revert FlightAlreadyEnabled();
+    // function enableFlight(uint256 _flightId) external onlyOwner {
+    //     if (flights[_flightId].status == FlightStatus.Enabled)
+    //         revert FlightAlreadyEnabled();
 
-        flights[_flightId].status = FlightStatus.Enabled;
-        availableFlights.push(_flightId);
+    //     flights[_flightId].status = FlightStatus.Enabled;
+    //     availableFlights.push(_flightId);
 
-        emit FlightEnabled(_flightId);
-    }
+    //     emit FlightEnabled(_flightId);
+    // }
 
-    function withdraw() public onlyOwner {
-        (bool s, ) = owner.call{value: address(this).balance}("");
-        if (!s) revert TransferFailed();
-    }
+    // function withdraw() external onlyOwner {
+    //     (bool s, ) = owner.call{value: address(this).balance}("");
+    //     if (!s) revert TransferFailed();
+    // }
 
-    function transferOwnership(address _newOwner) external onlyOwner {
-        if (_newOwner == address(0)) revert InvalidAddressProvided();
-        owner = _newOwner;
-    }
+    // function transferOwnership(address _newOwner) external onlyOwner {
+    //     if (_newOwner == address(0)) revert InvalidAddressProvided();
+    //     owner = _newOwner;
+    // }
 }
