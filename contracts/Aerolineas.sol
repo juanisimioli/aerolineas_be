@@ -55,15 +55,12 @@ contract Aerolineas is ERC721, AerolineasFlights {
         uint256 seatId,
         address passenger
     );
-    event ReservationCanceled(
-        uint256 indexed reservationId,
-        address passengers
-    );
     event ReservationTransferred(
         uint256 indexed reservationId,
-        address indexed previousOwner,
+        address indexed oldOwner,
         address indexed newOwner
     );
+    event ReservationCanceled(uint256 indexed reservationId, address passenger);
     event ReservationOnResale(
         uint256 indexed reservationId,
         uint256 _resalePrice,
@@ -118,8 +115,6 @@ contract Aerolineas is ERC721, AerolineasFlights {
             reservation.seatId = _seatId;
             reservation.passenger = msg.sender;
             reservation.timestamp = block.timestamp;
-
-            console(block);
 
             flight.seats[_seatId].status = SeatStatus.Sold;
 
@@ -262,6 +257,11 @@ contract Aerolineas is ERC721, AerolineasFlights {
     ) external {
         Flight storage flight = flights[reservations[_reservationId].flightId];
         if (flight.status != FlightStatus.Enabled) revert FlightNotAvailable();
+
+        if (
+            addressOnFlight[reservations[_reservationId].flightId][_newOwner] ==
+            AddressOnFlight.Taken
+        ) revert ReservationAlreadyTakenOnThisFlight();
 
         AerolineasUtils.removeElement(
             reservationsByAddress[msg.sender],
