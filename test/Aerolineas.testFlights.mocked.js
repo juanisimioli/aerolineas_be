@@ -2,7 +2,7 @@ const {
   tokens,
   iataToUint24,
   generateSeatsFromConfig,
-} = require("./Aerolineas.utils");
+} = require("../utils/Aerolineas.utils");
 
 const { SeatColumn } = require("../scripts/Aerolineas.contract.mocked");
 

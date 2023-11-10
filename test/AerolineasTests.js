@@ -9,9 +9,13 @@ const {
   SeatStatus,
 } = require("../scripts/Aerolineas.contract.mocked");
 
-const { FLIGHT_1, FLIGHT_2, FLIGHT_3 } = require("./Aerolineas.flights.mocked");
+const {
+  FLIGHT_1,
+  FLIGHT_2,
+  FLIGHT_3,
+} = require("./Aerolineas.testFlights.mocked");
 
-const { tokens } = require("./Aerolineas.utils");
+const { tokens } = require("../utils/Aerolineas.utils");
 const { ethers } = require("hardhat");
 
 describe("Aerolineas", () => {
