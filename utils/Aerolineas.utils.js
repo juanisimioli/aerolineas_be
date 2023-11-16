@@ -62,10 +62,20 @@ const generateSeatsFromConfig = (seatsConfig) => {
   return seatsForFlight.acc;
 };
 
+const epochToJsDate = (ts) => {
+  return new Date(Number(ts) * 1000);
+};
+
+const jsDateToEpoch = (string) => {
+  return Date.parse(string) / 1000;
+};
+
 module.exports = {
   getKeyByValue,
   tokens,
   iataToUint24,
   uint24ToIata,
   generateSeatsFromConfig,
+  epochToJsDate,
+  jsDateToEpoch,
 };
