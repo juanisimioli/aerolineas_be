@@ -2,6 +2,16 @@ require("dotenv").config();
 const { ethers } = require("hardhat");
 
 const {
+  LOCAL_AEROLINEAS_CONTRACT_ADDRESS,
+  SEPOLIA_AEROLINEAS_CONTRACT_ADDRESS,
+} = process.env;
+
+const contractAddress = {
+  localhost: LOCAL_AEROLINEAS_CONTRACT_ADDRESS,
+  sepolia: SEPOLIA_AEROLINEAS_CONTRACT_ADDRESS,
+};
+
+const {
   FLIGHT_1,
   FLIGHT_2,
   FLIGHT_3,
@@ -39,10 +49,9 @@ const createMockedFlights = async (aerolineas) => {
 };
 
 async function main() {
-  const { AEROLINEAS_ADDRESS } = process.env;
   const aerolineas = await ethers.getContractAt(
     "Aerolineas",
-    AEROLINEAS_ADDRESS
+    contractAddress[hre.network.name]
   );
 
   await createMockedFlights(aerolineas);
