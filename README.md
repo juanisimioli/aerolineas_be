@@ -2,8 +2,6 @@
 
 Hello! I'm Juanisimioli, a frontend developer venturing into the blockchain ecosystem. I'm practicing by building decentralized applications (dapps) from scratch using NextJS 14 + Ethers 6.8 + Hardhat 2.19.
 
-<br/>
-
 ## Overview
 
 This dapp facilitates the purchase of flight tickets using cryptocurrency. Each seat from one destination to another on a specific flight is represented as an NFT. This allows users to perform various actions such as canceling reservations, purchasing tickets, making free transfer reservations, or even reselling tickets at a desired price for others to buy.
@@ -12,7 +10,7 @@ The smart contract in this project utilizes ERC-720 standards and is organized i
 
 <br/>
 
-## Deployment
+## dApp
 
 The application is developed entirely by Juanisimioli and is available for your use. Feel free to provide feedback or even consider hiring me!
 
@@ -22,8 +20,6 @@ You can also explore the frontend repository [here](https://github.com/juanisimi
 
 **Note**: Complete the .env file with addresses and credentials. Refer to the .env.example file for guidance.
 
-<br/>
-
 ## Testing
 
 To run tests, use the following command:
@@ -32,7 +28,7 @@ To run tests, use the following command:
 REPORT_GAS=true npx hardhat test
 ```
 
-<br/><br/>
+<br/>
 
 # DEPLOYMENT (local or testnet)
 
