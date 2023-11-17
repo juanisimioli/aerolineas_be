@@ -77,6 +77,14 @@ npx hardhat verify --network sepolia --constructor-args scripts/arguments.js
 
 ## Contract ABI
 
-Once the smart contract is compiled, find the ABI at this location: /artifacts/contracts/Aerolineas.sol/Aerolineas.json. You'll need the ABI to run the frontend repository locally.
+Once the smart contract is compiled, find the ABI at this location:
 
-For any inquiries, feel free to reach out via email at [juanisimioli@gmail.com](mailto:juanisimioli@gmail.com) or connect with me on [LinkedIn](https://www.linkedin.com/in/juanisimioli/).
+```shell
+/artifacts/contracts/Aerolineas.sol/Aerolineas.json.
+```
+
+You'll need the ABI to run the frontend repository locally.
+
+## Contact me
+
+I would love to hear from you! Whether you have questions, feedback, or just want to connect, please don't hesitate to reach out via email at [juanisimioli@gmail.com](mailto:juanisimioli@gmail.com) or connect with me on [LinkedIn](https://www.linkedin.com/in/juanisimioli/). Learning together in this community is a wonderful experience, and I'm always open to feedback and collaboration.
