@@ -2,7 +2,7 @@
 
 Hello! I'm Juanisimioli, a frontend developer venturing into the blockchain ecosystem. I'm practicing by building decentralized applications (dapps) from scratch using NextJS 14 + Ethers 6.8 + Hardhat 2.19.
 
----
+<br/>
 
 ## Overview
 
@@ -10,7 +10,7 @@ This dapp facilitates the purchase of flight tickets using cryptocurrency. Each 
 
 The smart contract in this project utilizes ERC-720 standards and is organized into four files to prevent exceeding the size limit for deployment while maintaining clear responsibilities.
 
----
+<br/>
 
 ## Deployment
 
@@ -22,7 +22,7 @@ You can also explore the frontend repository [here](https://github.com/juanisimi
 
 **Note**: Complete the .env file with addresses and credentials. Refer to the .env.example file for guidance.
 
----
+<br/>
 
 ## Testing
 
@@ -32,9 +32,7 @@ To run tests, use the following command:
 REPORT_GAS=true npx hardhat test
 ```
 
----
-
----
+<br/><br/>
 
 # DEPLOYMENT (local or testnet)
 
@@ -60,7 +58,7 @@ Run the script to create mocked flights:
 npx hardhat run --network localhost scripts/createFlights.js
 ```
 
----
+<br/>
 
 ## TestNet Deployment
 
@@ -78,7 +76,7 @@ Run the script to create mocked flights on the testnet:
 npx hardhat run --network sepolia scripts/createFlights.js
 ```
 
----
+<br/>
 
 ## Contract Verification
 
@@ -89,7 +87,7 @@ npx hardhat verify --network sepolia --constructor-args scripts/arguments.js
 
 ```
 
----
+<br/>
 
 ## Contract ABI
 
@@ -101,7 +99,7 @@ Once the smart contract is compiled, find the ABI at this location:
 
 You'll need the ABI to run the frontend repository locally.
 
----
+<br/>
 
 ## Contact me
 
