@@ -1,14 +1,9 @@
 require("dotenv").config();
 const { ethers } = require("hardhat");
 
-const {
-  LOCAL_AEROLINEAS_CONTRACT_ADDRESS,
-  SEPOLIA_AEROLINEAS_CONTRACT_ADDRESS,
-} = process.env;
-
 const contractAddress = {
-  localhost: LOCAL_AEROLINEAS_CONTRACT_ADDRESS,
-  sepolia: SEPOLIA_AEROLINEAS_CONTRACT_ADDRESS,
+  localhost: process.env.LOCALHOST_AEROLINEAS_CONTRACT_ADDRESS,
+  sepolia: process.env.SEPOLIA_AEROLINEAS_CONTRACT_ADDRESS,
 };
 
 const {
