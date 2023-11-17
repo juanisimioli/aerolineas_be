@@ -2,11 +2,15 @@
 
 Hello! I'm Juanisimioli, a frontend developer venturing into the blockchain ecosystem. I'm practicing by building decentralized applications (dapps) from scratch using NextJS 14 + Ethers 6.8 + Hardhat 2.19.
 
+---
+
 ## Overview
 
 This dapp facilitates the purchase of flight tickets using cryptocurrency. Each seat from one destination to another on a specific flight is represented as an NFT. This allows users to perform various actions such as canceling reservations, purchasing tickets, making free transfer reservations, or even reselling tickets at a desired price for others to buy.
 
 The smart contract in this project utilizes ERC-720 standards and is organized into four files to prevent exceeding the size limit for deployment while maintaining clear responsibilities.
+
+---
 
 ## Deployment
 
@@ -18,6 +22,8 @@ You can also explore the frontend repository [here](https://github.com/juanisimi
 
 **Note**: Complete the .env file with addresses and credentials. Refer to the .env.example file for guidance.
 
+---
+
 ## Testing
 
 To run tests, use the following command:
@@ -25,6 +31,10 @@ To run tests, use the following command:
 ```shell
 REPORT_GAS=true npx hardhat test
 ```
+
+---
+
+---
 
 # DEPLOYMENT (local or testnet)
 
@@ -50,6 +60,8 @@ Run the script to create mocked flights:
 npx hardhat run --network localhost scripts/createFlights.js
 ```
 
+---
+
 ## TestNet Deployment
 
 To deploy on the Sepolia testnet, run:
@@ -66,6 +78,8 @@ Run the script to create mocked flights on the testnet:
 npx hardhat run --network sepolia scripts/createFlights.js
 ```
 
+---
+
 ## Contract Verification
 
 You can verify your contract code on Etherscan:
@@ -74,6 +88,8 @@ You can verify your contract code on Etherscan:
 npx hardhat verify --network sepolia --constructor-args scripts/arguments.js
 
 ```
+
+---
 
 ## Contract ABI
 
@@ -84,6 +100,8 @@ Once the smart contract is compiled, find the ABI at this location:
 ```
 
 You'll need the ABI to run the frontend repository locally.
+
+---
 
 ## Contact me
 
