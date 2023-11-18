@@ -30,7 +30,7 @@ REPORT_GAS=true npx hardhat test
 
 <br/>
 
-# DEPLOYMENT (local or testnet)
+# DEPLOYMENT
 
 ## Local Deployment
 
@@ -56,7 +56,7 @@ npx hardhat run --network localhost scripts/createFlights.js
 
 <br/>
 
-## TestNet Deployment
+## Blockchain Deployment
 
 To deploy on the Sepolia testnet, run:
 
