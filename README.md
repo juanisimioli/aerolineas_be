@@ -79,7 +79,7 @@ npx hardhat run --network sepolia scripts/createFlights.js
 You can verify your contract code on Etherscan:
 
 ```shell
-npx hardhat verify --network sepolia --constructor-args scripts/arguments.js
+npx hardhat verify --network sepolia --constructor-args scripts/arguments.js [contractAddress]
 
 ```
 
