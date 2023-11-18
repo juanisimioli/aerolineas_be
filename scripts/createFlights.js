@@ -6,25 +6,7 @@ const contractAddress = {
   sepolia: process.env.SEPOLIA_AEROLINEAS_CONTRACT_ADDRESS,
 };
 
-const {
-  FLIGHT_1,
-  FLIGHT_2,
-  FLIGHT_3,
-  FLIGHT_4,
-  FLIGHT_5,
-  FLIGHT_6,
-  FLIGHT_7,
-} = require("./Aerolineas.prodFlights.mocked.js");
-
-const mockedFlights = [
-  FLIGHT_1,
-  FLIGHT_2,
-  FLIGHT_3,
-  FLIGHT_4,
-  FLIGHT_5,
-  FLIGHT_6,
-  FLIGHT_7,
-];
+const { all: mockedFlights } = require("./Aerolineas.prodFlights.mocked.js");
 
 const createMockedFlights = async (aerolineas) => {
   mockedFlights.map(
