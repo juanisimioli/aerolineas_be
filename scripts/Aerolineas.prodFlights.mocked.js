@@ -82,55 +82,55 @@ const FLIGHT_7 = {
 
 const FLIGHT_8 = {
   flightNumber: 888,
-  from: iataToUint24("USH"),
-  to: iataToUint24("SLA"),
-  departure: jsDateToEpoch("2024/01/28 07:05"),
-  arrival: jsDateToEpoch("2024/01/28 14:00"),
+  from: iataToUint24("BRC"),
+  to: iataToUint24("FTE"),
+  departure: jsDateToEpoch("2023/02/18 03:23"),
+  arrival: jsDateToEpoch("2024/02/19 07:29"),
   seats: generateSeatsFromConfig(seatsConfigFlight),
 };
 
 const FLIGHT_9 = {
   flightNumber: 999,
-  from: iataToUint24("USH"),
-  to: iataToUint24("SLA"),
-  departure: jsDateToEpoch("2024/01/28 07:05"),
-  arrival: jsDateToEpoch("2024/01/28 14:00"),
+  from: iataToUint24("EZE"),
+  to: iataToUint24("MAD"),
+  departure: jsDateToEpoch("2023/11/01 03:24"),
+  arrival: jsDateToEpoch("2023/11/01 21:41"),
   seats: generateSeatsFromConfig(seatsConfigFlight),
 };
 
 const FLIGHT_10 = {
   flightNumber: 1010,
-  from: iataToUint24("USH"),
-  to: iataToUint24("SLA"),
-  departure: jsDateToEpoch("2024/01/28 07:05"),
-  arrival: jsDateToEpoch("2024/01/28 14:00"),
+  from: iataToUint24("JFK"),
+  to: iataToUint24("CDG"),
+  departure: jsDateToEpoch("2023/11/28 11:15"),
+  arrival: jsDateToEpoch("2023/11/28 22:19"),
   seats: generateSeatsFromConfig(seatsConfigFlight),
 };
 
 const FLIGHT_11 = {
   flightNumber: 1011,
-  from: iataToUint24("USH"),
-  to: iataToUint24("SLA"),
-  departure: jsDateToEpoch("2024/01/28 07:05"),
-  arrival: jsDateToEpoch("2024/01/28 14:00"),
+  from: iataToUint24("MDZ"),
+  to: iataToUint24("CRD"),
+  departure: jsDateToEpoch("2023/10/28 15:47"),
+  arrival: jsDateToEpoch("2023/10/28 21:04"),
   seats: generateSeatsFromConfig(seatsConfigFlight),
 };
 
 const FLIGHT_12 = {
   flightNumber: 1012,
-  from: iataToUint24("USH"),
-  to: iataToUint24("SLA"),
-  departure: jsDateToEpoch("2024/01/28 07:05"),
-  arrival: jsDateToEpoch("2024/01/28 14:00"),
+  from: iataToUint24("MDQ"),
+  to: iataToUint24("BHI"),
+  departure: jsDateToEpoch("2023/12/22 09:05"),
+  arrival: jsDateToEpoch("2023/12/22 13:33"),
   seats: generateSeatsFromConfig(seatsConfigFlight),
 };
 
 const FLIGHT_13 = {
   flightNumber: 1013,
-  from: iataToUint24("USH"),
-  to: iataToUint24("SLA"),
-  departure: jsDateToEpoch("2024/01/28 07:05"),
-  arrival: jsDateToEpoch("2024/01/28 14:00"),
+  from: iataToUint24("VDM"),
+  to: iataToUint24("CPC"),
+  departure: jsDateToEpoch("2023/12/30 14:21"),
+  arrival: jsDateToEpoch("2023/12/30 22:49"),
   seats: generateSeatsFromConfig(seatsConfigFlight),
 };
 
@@ -138,26 +138,26 @@ const FLIGHT_14 = {
   flightNumber: 1014,
   from: iataToUint24("USH"),
   to: iataToUint24("SLA"),
-  departure: jsDateToEpoch("2024/01/28 07:05"),
-  arrival: jsDateToEpoch("2024/01/28 14:00"),
+  departure: jsDateToEpoch("2024/07/18 01:13"),
+  arrival: jsDateToEpoch("2024/07/18 14:21"),
   seats: generateSeatsFromConfig(seatsConfigFlight),
 };
 
 const FLIGHT_15 = {
   flightNumber: 1015,
-  from: iataToUint24("USH"),
-  to: iataToUint24("SLA"),
-  departure: jsDateToEpoch("2024/01/28 07:05"),
-  arrival: jsDateToEpoch("2024/01/28 14:00"),
+  from: iataToUint24("MDQ"),
+  to: iataToUint24("CDG"),
+  departure: jsDateToEpoch("2024/01/17 13:13"),
+  arrival: jsDateToEpoch("2024/01/17 22:19"),
   seats: generateSeatsFromConfig(seatsConfigFlight),
 };
 
 const FLIGHT_16 = {
   flightNumber: 1016,
-  from: iataToUint24("USH"),
-  to: iataToUint24("SLA"),
-  departure: jsDateToEpoch("2024/01/28 07:05"),
-  arrival: jsDateToEpoch("2024/01/28 14:00"),
+  from: iataToUint24("BRC"),
+  to: iataToUint24("JFK"),
+  departure: jsDateToEpoch("2024/03/11 17:05"),
+  arrival: jsDateToEpoch("2024/03/12 19:20"),
   seats: generateSeatsFromConfig(seatsConfigFlight),
 };
 
